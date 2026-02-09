@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 3.12)
+project(orderbook_engine)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Find required packages
+find_package(pybind11 REQUIRED)
+
+# Create the pybind11 module
+pybind11_add_module(orderbook_engine orderbook_bindings.cpp)
+
+# Compiler-specific options
+if(MSVC)
+    target_compile_definitions(orderbook_engine PRIVATE VERSION_INFO=${EXAMPLE_VERSION_INFO})
+else()
+    target_compile_definitions(orderbook_engine PRIVATE VERSION_INFO="${EXAMPLE_VERSION_INFO}")
+    target_compile_options(orderbook_engine PRIVATE -O3 -Wall -Wextra)
+endif()
+
+# Properties
+set_target_properties(orderbook_engine PROPERTIES
+    CXX_VISIBILITY_PRESET "hidden"
+    VISIBILITY_INLINES_HIDDEN ON
+)
